@@ -1,3 +1,6 @@
+configfile: "config.yaml"
+print("Config is: ", config)
+print(" ".join(config.get("spades", "")))
 rule trim_galore_pe:
     input:
         ["reads/{sample}.1.fastq.gz", "reads/{sample}.2.fastq.gz"],
@@ -7,7 +10,7 @@ rule trim_galore_pe:
         "results/trimmed/{sample}.2_val_2.fq.gz",
         "results/trimmed/{sample}.2.fastq.gz_trimming_report.txt",
     params:
-        extra="--illumina -q 20",
+        extra= " ".join(config.get("trim_galore", "")),
     log:
         "logs/trim_galore/{sample}.log",
     wrapper:
@@ -17,11 +20,24 @@ rule spades:
     input: 
         ["results/trimmed/{sample}.1_val_1.fq.gz", "results/trimmed/{sample}.2_val_2.fq.gz"],
     output: directory('results/{sample}_spades'),
+    params:
+        extra = " ".join(config.get("spades", "")),
     log:
         "logs/spades/{sample}.log",
-    shell: 'spades.py -o {output} -1 results/trimmed/{wildcards.sample}.1_val_1.fq.gz -2 results/trimmed/{wildcards.sample}.2_val_2.fq.gz >> {log} 2>&1'
+    shell: 
+        "spades.py {params.extra}" 
+        " -o {output} -1 results/trimmed/{wildcards.sample}.1_val_1.fq.gz" 
+        " -2 results/trimmed/{wildcards.sample}.2_val_2.fq.gz"
+        " >> {log} 2>&1"
 
-rule quak:
+rule quast:
     input:  'results/{sample}_spades'
-    output: directory('results/{sample}_quak'),
-    shell: 'quast {input}/contigs.fasta --min-contig 10 -o {output}' 
+    output: directory('results/{sample}_quast'),
+    log: "logs/quast/{sample}.log",
+    params:
+        extra = " ".join(config.get("quast", "")),
+    shell: 
+        "quast {params.extra} "
+        "{input}/contigs.fasta "
+        "-o {output}"
+        " >> {log} 2>&1"        
