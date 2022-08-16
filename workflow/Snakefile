@@ -13,6 +13,8 @@ rule trim_galore_pe:
         extra= " ".join(config.get("trim_galore", "")),
     log:
         "logs/trim_galore/{sample}.log",
+    conda:
+        "envs/trim-galore.yaml",
     wrapper:
         "v1.7.1/bio/trim_galore/pe"
 
@@ -24,6 +26,8 @@ rule spades:
         extra = " ".join(config.get("spades", "")),
     log:
         "logs/spades/{sample}.log",
+    conda:
+        "envs/spades.yaml",
     shell: 
         "spades.py {params.extra}" 
         " -o {output} -1 results/trimmed/{wildcards.sample}.1_val_1.fq.gz" 
@@ -36,6 +40,8 @@ rule quast:
     log: "logs/quast/{sample}.log",
     params:
         extra = " ".join(config.get("quast", "")),
+    conda:
+        "envs/quast.yaml",
     shell: 
         "quast {params.extra} "
         "{input}/contigs.fasta "
