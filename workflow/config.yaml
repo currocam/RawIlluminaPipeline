@@ -1,0 +1,7 @@
+trim_galore: 
+  - "--illumina" #Illumina adapter
+  - "--quality 20" #Phred score
+  # Don't run with `--fastqc` flag
+
+quast:
+  - "--min-contig 10" #Lower threshold for a contig length (in bp)
