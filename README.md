@@ -1,21 +1,30 @@
-# Snakemake workflow: `<name>`
+# Snakemake workflow: Raw-Illumina-Pipeline
 
 [![Snakemake](https://img.shields.io/badge/snakemake-≥6.3.0-brightgreen.svg)](https://snakemake.github.io)
-[![GitHub actions status](https://github.com/<owner>/<repo>/workflows/Tests/badge.svg?branch=main)](https://github.com/<owner>/<repo>/actions?query=branch%3Amain+workflow%3ATests)
+[![GitHub actions status](https://github.com/currocam/RawIlluminaPipeline/workflows/Tests/badge.svg?branch=main)](https://github.com/currocam/RawIlluminaPipeline/actions?query=branch%3Amain+workflow%3ATests)
 
 
-A Snakemake workflow for `<description>`
-
+A Snakemake workflow for raw illumine reads to draft assemblies and annotations
 
 ## Usage
 
-The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/?usage=<owner>%2F<repo>).
+First, make sure to activate the conda base environment with
+``` bash
+conda activate base
+```
 
-If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) <repo>sitory and its DOI (see above).
+The environment.yaml file can be used to install all required software into an isolated Conda environment with the name snakemake-RawIlluminaPipeline via
+``` bash
+mamba env create --name snakemake-RawIlluminaPipeline --file environment.yaml
+```
 
-# TODO
+To activate this environment, use
+``` bash
+conda activate snakemake-RawIlluminaPipeline
+```
 
-* Replace `<owner>` and `<repo>` everywhere in the template (also under .github/workflows) with the correct `<repo>` name and owning user or organization.
-* Replace `<name>` with the workflow name (can be the same as `<repo>`).
-* Replace `<description>` with a description of what the workflow does.
-* The workflow will occur in the snakemake-workflow-catalog once it has been made public. Then the link under "Usage" will point to the usage instructions if `<owner>` and `<repo>` were correctly set.
+To deactivate an active environment, use
+
+``` bash
+conda deactivate
+```

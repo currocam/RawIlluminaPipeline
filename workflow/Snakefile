@@ -1,4 +1,62 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+configfile: "config/config.yaml"
+
+
+print("Config is: ", config)
+print(" ".join(config.get("spades", "")))
+
+
+rule trim_galore_pe:
+    input:
+        ["reads/{sample}.1.fastq.gz", "reads/{sample}.2.fastq.gz"],
+    output:
+        "results/trimmed/{sample}.1_val_1.fq.gz",
+        "results/trimmed/{sample}.1.fastq.gz_trimming_report.txt",
+        "results/trimmed/{sample}.2_val_2.fq.gz",
+        "results/trimmed/{sample}.2.fastq.gz_trimming_report.txt",
+    params:
+        extra=" ".join(config.get("trim_galore", "")),
+    log:
+        "logs/trim_galore/{sample}.log",
+    conda:
+        "envs/trim-galore.yaml"
+    wrapper:
+        "v1.7.1/bio/trim_galore/pe"
+
+
+rule spades:
+    input:
+        [
+            "results/trimmed/{sample}.1_val_1.fq.gz",
+            "results/trimmed/{sample}.2_val_2.fq.gz",
+        ],
+    output:
+        directory("results/{sample}_spades"),
+    params:
+        extra=" ".join(config.get("spades", "")),
+    log:
+        "logs/spades/{sample}.log",
+    conda:
+        "envs/spades.yaml"
+    shell:
+        "spades.py {params.extra}"
+        " -o {output} -1 results/trimmed/{wildcards.sample}.1_val_1.fq.gz"
+        " -2 results/trimmed/{wildcards.sample}.2_val_2.fq.gz"
+        " >> {log} 2>&1"
+
+
+rule quast:
+    input:
+        "results/{sample}_spades",
+    output:
+        directory("results/{sample}_quast"),
+    log:
+        "logs/quast/{sample}.log",
+    params:
+        extra=" ".join(config.get("quast", "")),
+    conda:
+        "envs/quast.yaml"
+    shell:
+        "quast {params.extra} "
+        "{input}/contigs.fasta "
+        "-o {output}"
+        " >> {log} 2>&1"
