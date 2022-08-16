@@ -1,4 +1,27 @@
-# Main entrypoint of the workflow. 
-# Please follow the best practices: 
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there. 
+rule trim_galore_pe:
+    input:
+        ["reads/{sample}.1.fastq.gz", "reads/{sample}.2.fastq.gz"],
+    output:
+        "results/trimmed/{sample}.1_val_1.fq.gz",
+        "results/trimmed/{sample}.1.fastq.gz_trimming_report.txt",
+        "results/trimmed/{sample}.2_val_2.fq.gz",
+        "results/trimmed/{sample}.2.fastq.gz_trimming_report.txt",
+    params:
+        extra="--illumina -q 20",
+    log:
+        "logs/trim_galore/{sample}.log",
+    wrapper:
+        "v1.7.1/bio/trim_galore/pe"
+
+rule spades:
+    input: 
+        ["results/trimmed/{sample}.1_val_1.fq.gz", "results/trimmed/{sample}.2_val_2.fq.gz"],
+    output: directory('results/{sample}_spades'),
+    log:
+        "logs/spades/{sample}.log",
+    shell: 'spades.py -o {output} -1 results/trimmed/{wildcards.sample}.1_val_1.fq.gz -2 results/trimmed/{wildcards.sample}.2_val_2.fq.gz >> {log} 2>&1'
+
+rule quak:
+    input:  'results/{sample}_spades'
+    output: directory('results/{sample}_quak'),
+    shell: 'quast {input}/contigs.fasta --min-contig 10 -o {output}' 

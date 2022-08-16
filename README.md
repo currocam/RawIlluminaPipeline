@@ -6,11 +6,25 @@
 
 A Snakemake workflow for raw illumine reads to draft assemblies and annotations
 
-
 ## Usage
 
-The usage of this workflow is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog/?usage=currocam%2FRawIlluminaPipeline).
+First, make sure to activate the conda base environment with
+``` bash
+conda activate base
+```
 
-If you use this workflow in a paper, don't forget to give credits to the authors by citing the URL of this (original) RawIlluminaPipelinesitory and its DOI (see above).
+The environment.yaml file can be used to install all required software into an isolated Conda environment with the name snakemake-RawIlluminaPipeline via
+``` bash
+mamba env create --name snakemake-RawIlluminaPipeline --file environment.yaml
+```
 
-TODO
+To activate this environment, use
+``` bash
+conda activate snakemake-RawIlluminaPipeline
+```
+
+To deactivate an active environment, use
+
+``` bash
+conda deactivate
+```
