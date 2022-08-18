@@ -1,10 +1,5 @@
 configfile: "config/config.yaml"
 
-
-print("Config is: ", config)
-print(" ".join(config.get("spades", "")))
-
-
 rule trim_galore_pe:
     input:
         ["reads/{sample}.1.fastq.gz", "reads/{sample}.2.fastq.gz"],
