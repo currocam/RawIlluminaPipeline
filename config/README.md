@@ -17,11 +17,20 @@ prokka:
   # Don't run with `-outdir` flag 
 ```
 
-The following scheme is simple: the name of the program followed by the list of program flags (as they would normally be used). Although not necessary, it would be ideal to create a custom configuration file for each use case and enclose the text in quotation marks, separate the different commands on different lines and add comments. That is, although this would be perfectly valid: 
+The following scheme is simple: the name of the program followed by the list of program flags (as they would normally be used). 
+
+Although not necessary, it would be ideal to: 
+
+1. Create a custom configuration file for each use case
+2. Enclose the text in quotation marks
+3. Separate the different commands on different lines
+4. Add comments. 
+
+That is, although this would be perfectly valid: 
 
 ```yaml
 trim_galore: 
-  - --illumina --quality 20"
+  - --illumina --quality 20
 ```
 
 This is preferable: 
