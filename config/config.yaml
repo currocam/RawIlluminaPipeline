@@ -5,3 +5,7 @@ trim_galore:
 
 quast:
   - "--min-contig 10" #Lower threshold for a contig length (in bp)
+
+prokka:
+  - "--prefix mygenome" #Filename output prefix [auto] (default '')
+  # Don't run with `-outdir` flag 

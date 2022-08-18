@@ -28,3 +28,9 @@ To deactivate an active environment, use
 ``` bash
 conda deactivate
 ```
+
+To run the pipeline with toy data: 
+
+```bash
+snakemake results/clock_10K_prokka --cores 8
+```

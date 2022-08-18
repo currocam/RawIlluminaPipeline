@@ -60,3 +60,20 @@ rule quast:
         "{input}/contigs.fasta "
         "-o {output}"
         " >> {log} 2>&1"
+
+
+rule prokka:
+    input:
+        "results/{sample}_quast",
+    output:
+        directory("results/{sample}_prokka"),
+    log:
+        "logs/prokka/{sample}.log",
+    params:
+        extra=" ".join(config.get("prokka", "")),
+    conda:
+        "envs/prokka.yaml"
+    shell:
+        "prokka --outdir {output} {params.extra} "
+        "results/{wildcards.sample}_spades/contigs.fasta "
+        " >> {log} 2>&1"
